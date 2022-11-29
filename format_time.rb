@@ -1,16 +1,16 @@
 class FormatTime
 
   TYPES = {
-    year: Time.now.strftime("%Y"),
-    month: Time.now.strftime("%m"),
-    day: Time.now.strftime("%d"),
-    hour: Time.now.strftime("%H"),
-    minute: Time.now.strftime("%M"),
-    second: Time.now.strftime("%S")
+    year: "%Y",
+    month: "%m",
+    day: "%d",
+    hour: "%H",
+    minute: "%M",
+    second: "%S"
   }.freeze
 
-  def initialize(request:)
-    @format = request.params['format']
+  def initialize(format:)
+    @format = format || ''
   end
 
   def valid?
@@ -19,12 +19,12 @@ class FormatTime
 
   def invlaid_formats
     unkonown_formats = @format.split(',').map {|a| a unless TYPES[a.to_sym]}
-    ['Unknown time format ', unkonown_formats.compact!.to_s]
+    unkonown_formats.compact!
   end
   
   def time
     time = @format.split(',').map { |a| TYPES[a.to_sym] }
-    [time.join('-')]
+    Time.now.strftime(time.join('-'))
   end
 
 end

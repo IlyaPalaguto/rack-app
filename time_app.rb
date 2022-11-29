@@ -3,7 +3,7 @@ require_relative 'format_time'
 class TimeApp
   
   def call(env)
-    formatter = FormatTime.new(request: Rack::Request.new(env))
+    formatter = FormatTime.new(format: Rack::Request.new(env).params['format'])
 
     [response_status(formatter), {}, response_body(formatter)]
   end
@@ -20,9 +20,9 @@ class TimeApp
 
   def response_body(formatter)
     if formatter.valid?
-      formatter.time
+      [formatter.time]
     else
-      formatter.invlaid_formats 
+      ['Unknown time format ', formatter.invlaid_formats.to_s]
     end
   end
 
